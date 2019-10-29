@@ -5,25 +5,25 @@
 
     var root = this;
 
-    var EXIF = function (obj) {
-        if (obj instanceof EXIF) return obj;
-        if (!(this instanceof EXIF)) return new EXIF(obj);
+    var EXIF2 = function (obj) {
+        if (obj instanceof EXIF2) return obj;
+        if (!(this instanceof EXIF2)) return new EXIF2(obj);
         this.EXIFwrapped = obj;
     };
 
     if (typeof exports !== 'undefined') {
         if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = EXIF;
+            exports = module.exports = EXIF2;
         }
-        exports.EXIF = EXIF;
+        exports.EXIF2 = EXIF2;
     } else {
-        root.EXIF = EXIF;
+        root.EXIF2 = EXIF2;
     }
 
-    var ExifTags = EXIF.Tags = {
+    var ExifTags = EXIF2.Tags = {
 
         // version tags
-        0x9000: "ExifVersion", // EXIF version
+        0x9000: "ExifVersion", // EXIF2 version
         0xA000: "FlashpixVersion", // Flashpix format version
 
         // colorspace tags
@@ -96,7 +96,7 @@
         0xA420: "ImageUniqueID" // Identifier assigned uniquely to each image
     };
 
-    var TiffTags = EXIF.TiffTags = {
+    var TiffTags = EXIF2.TiffTags = {
         0x87B1: "GT Citation",
         0x0100: "ImageWidth",
         0x0101: "ImageHeight",
@@ -133,7 +133,7 @@
         0x8298: "Copyright"
     };
 
-    var GPSTags = EXIF.GPSTags = {
+    var GPSTags = EXIF2.GPSTags = {
         0x0000: "GPSVersionID",
         0x0001: "GPSLatitudeRef",
         0x0002: "GPSLatitude",
@@ -167,8 +167,8 @@
         0x001E: "GPSDifferential"
     };
 
-    // EXIF 2.3 Spec
-    var IFD1Tags = EXIF.IFD1Tags = {
+    // EXIF2 2.3 Spec
+    var IFD1Tags = EXIF2.IFD1Tags = {
         0x0100: "ImageWidth",
         0x0101: "ImageHeight",
         0x0102: "BitsPerSample",
@@ -191,7 +191,7 @@
         0x0214: "ReferenceBlackWhite"
     };
 
-    var StringValues = EXIF.StringValues = {
+    var StringValues = EXIF2.StringValues = {
         ExposureProgram: {
             0: "Not defined",
             1: "Manual",
@@ -378,7 +378,7 @@
             img.exifdata = data || {};
             var iptcdata = findIPTCinJPEG(binFile);
             img.iptcdata = iptcdata || {};
-            if (EXIF.isXmpEnabled) {
+            if (EXIF2.isXmpEnabled) {
                 var xmpdata = findXMPinJPEG(binFile);
                 img.xmpdata = xmpdata || {};
             }
@@ -448,7 +448,7 @@
             if (debug) console.log(marker);
 
             // we could implement handling for other markers here,
-            // but we're only looking for 0xFFE1 for EXIF data
+            // but we're only looking for 0xFFE1 for EXIF2 data
 
             if (marker == 225) {
                 if (debug) console.log("Found 0xFFE1 marker");
@@ -713,7 +713,7 @@
 
         var thumbTags = readTags(dataView, tiffStart, tiffStart + IFD1OffsetPointer, IFD1Tags, bigEnd)
 
-        // EXIF 2.3 specification for JPEG format thumbnail
+        // EXIF2 2.3 specification for JPEG format thumbnail
 
         // If the value of Compression(0x0103) Tag in IFD1 is '6', thumbnail image format is JPEG.
         // Most of Exif image uses JPEG format for thumbnail. In that case, you can get offset of thumbnail
@@ -759,7 +759,7 @@
 
     function readEXIFData(file, start) {
         if (getStringFromDB(file, start, 4) != "Exif") {
-            if (debug) console.log("Not valid EXIF data! " + getStringFromDB(file, start, 4));
+            if (debug) console.log("Not valid EXIF2 data! " + getStringFromDB(file, start, 4));
             return false;
         }
 
@@ -981,15 +981,15 @@
         }
     }
 
-    EXIF.enableXmp = function () {
-        EXIF.isXmpEnabled = true;
+    EXIF2.enableXmp = function () {
+        EXIF2.isXmpEnabled = true;
     }
 
-    EXIF.disableXmp = function () {
-        EXIF.isXmpEnabled = false;
+    EXIF2.disableXmp = function () {
+        EXIF2.isXmpEnabled = false;
     }
 
-    EXIF.getData = function (img, callback) {
+    EXIF2.getData = function (img, callback) {
         if (((self.Image && img instanceof self.Image) ||
                 (self.HTMLImageElement && img instanceof self.HTMLImageElement)) &&
             !img.complete)
@@ -1005,17 +1005,17 @@
         return true;
     }
 
-    EXIF.getTag = function (img, tag) {
+    EXIF2.getTag = function (img, tag) {
         if (!imageHasData(img)) return;
         return img.exifdata[tag];
     }
 
-    EXIF.getIptcTag = function (img, tag) {
+    EXIF2.getIptcTag = function (img, tag) {
         if (!imageHasData(img)) return;
         return img.iptcdata[tag];
     }
 
-    EXIF.getAllTags = function (img) {
+    EXIF2.getAllTags = function (img) {
         if (!imageHasData(img)) return {};
         var a,
             data = img.exifdata,
@@ -1028,7 +1028,7 @@
         return tags;
     }
 
-    EXIF.getAllIptcTags = function (img) {
+    EXIF2.getAllIptcTags = function (img) {
         if (!imageHasData(img)) return {};
         var a,
             data = img.iptcdata,
@@ -1041,7 +1041,7 @@
         return tags;
     }
 
-    EXIF.pretty = function (img) {
+    EXIF2.pretty = function (img) {
         if (!imageHasData(img)) return "";
         var a,
             data = img.exifdata,
@@ -1062,7 +1062,7 @@
         return strPretty;
     }
 
-    EXIF.readFromBinaryFile = function (file) {
+    EXIF2.readFromBinaryFile = function (file) {
         var exif = findEXIFinJPEG(file);
         if (!exif) {
             var dataView = new DataView(file);
@@ -1074,7 +1074,7 @@
 
     if (typeof define === 'function' && define.amd) {
         define('exif-js', [], function () {
-            return EXIF;
+            return EXIF2;
         });
     }
 }.call(this));
