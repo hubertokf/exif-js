@@ -1,6 +1,7 @@
 (function () {
 
-    var debug = false;
+    var debug = true;
+    console.log("starting")
 
     var root = this;
 
@@ -367,6 +368,7 @@
     }
 
     function getImageData(img, callback) {
+        console.log("getImageData")
         function handleBinaryFile(binFile) {
             var data = findEXIFinJPEG(binFile);
             if (!data) {
